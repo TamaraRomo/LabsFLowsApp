@@ -26,11 +26,12 @@ struct LoginView: View {
                               title: "Correo electrónico",
                               placeholder: "correo@ejemplo.mx")
                     .autocapitalization(.none)
+ 
                     inputView(text: $password,
                               title: "Contraseña",
                               placeholder: "Ingrese su contraseña",
                               isSecureField: true)
-                    
+
                 }
                 .padding(.horizontal)
                 .padding(.top, 12)
@@ -50,6 +51,8 @@ struct LoginView: View {
                     .frame(width: UIScreen.main.bounds.width - 70, height: 48)
                 }
                 .background(Color(.systemBlue))
+//                .disabled(formIsValid)
+//                .opacity(formIsValid ? 1.0 : 0.5)
                 .cornerRadius(10)
                 .padding(.top,12)
                 Spacer()
@@ -69,6 +72,15 @@ struct LoginView: View {
         }
     }
 }
+//
+//extension LoginView:AuthenticationFormProtocol{
+//    var formIsValid: Bool{
+//        return !email.isEmpty
+//        && email.contains("@uacam.mx")
+//        && !password.isEmpty
+//        && password.count > 5
+//    }
+//}
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
