@@ -27,25 +27,25 @@ class AuthViewModel: ObservableObject {
     
     func signIn(withEmail email: String, password: String) async throws {
         do {
-           let result = try await Auth.auth().signIn(withEmail: email, password: password)
-           self.userSession = result.user
-           await fetchUser()
-       } catch {
-           print("DEBUG: Hubo una falla iniciar sesión: \(error.localizedDescription)")
-       }
+            let result = try await Auth.auth().signIn(withEmail: email, password: password)
+            self.userSession = result.user
+            await fetchUser()
+        } catch {
+            print("DEBUG: Hubo una falla iniciar sesión: \(error.localizedDescription)")
+        }
     }
     
     func createUser(withEmail email: String, password: String, fullName: String, employeeNumber: String) async throws {
         do{
-                    let result = try await Auth.auth().createUser(withEmail: email, password: password)
-                    self.userSession = result.user
-                    let user = User(id: result.user.uid, fullname: fullName, employeeNumber: employeeNumber, email: email)
-                    let encodedUser = try Firestore.Encoder().encode(user)
-                    try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
-                    await fetchUser()
-                }catch{
-                    print("DEBUG: Hubo una falla al crear al usuario \(error.localizedDescription)")
-                }
+            let result = try await Auth.auth().createUser(withEmail: email, password: password)
+            self.userSession = result.user
+            let user = User(id: result.user.uid, fullname: fullName, employeeNumber: employeeNumber, email: email)
+            let encodedUser = try Firestore.Encoder().encode(user)
+            try await Firestore.firestore().collection("users").document(user.id).setData(encodedUser)
+            await fetchUser()
+        }catch{
+            print("DEBUG: Hubo una falla al crear al usuario \(error.localizedDescription)")
+        }
     }
     
     func signOut() {
@@ -62,5 +62,35 @@ class AuthViewModel: ObservableObject {
         guard let uid = try? Auth.auth().currentUser?.uid else {return}
         guard let snapshot = try? await Firestore.firestore().collection("users").document(uid).getDocument() else {return}
         self .currentUser = try? snapshot.data(as: User.self)
+    }
+    
+    func fetchLaboratories() async throws -> [Laboratories] {
+        let snapshot = try await Firestore.firestore().collection("laboratories").getDocuments()
+        return snapshot.documents.compactMap { document in
+            try? document.data(as: Laboratories.self)
+        }
+    }
+    
+    func fetchEducationalPrograms() async throws -> [EducationalProgram] {
+        let snapshot = try await Firestore.firestore().collection("educationalprograms").getDocuments()
+        return snapshot.documents.compactMap { document in
+            try? document.data(as: EducationalProgram.self)
+        }
+    }
+    
+    func fetchLearningUnit() async throws -> [LearningUnit] {
+        let snapshot = try await Firestore.firestore().collection("learningunits").getDocuments()
+        return snapshot.documents.compactMap { document in
+            try? document.data(as: LearningUnit.self)
+        }
+    }
+    
+    func createReservation(_ reservation: Reservation) async throws {
+        do {
+            let encodedReservation = try Firestore.Encoder().encode(reservation)
+            _ = try await Firestore.firestore().collection("reservations").addDocument(data: encodedReservation)
+        } catch {
+            throw error
+        }
     }
 }
