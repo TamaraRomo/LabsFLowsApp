@@ -40,42 +40,41 @@ struct ProfileView: View {
                         }
                     }
                     
-                    Section("Menú") {
+                    Section(header: Text("Menú")) {
                         NavigationLink(destination: ReservationsView()) {
                             SettingsRowView(imageName: "clock",
                                             title: "Reservar laboratorio",
                                             tintColor: Color(.systemGray))
                         }
                         
-                        
                         NavigationLink(destination: AgendaView()) {
                             SettingsRowView(imageName: "calendar",
                                             title: "Ver reservas de laboratorio",
                                             tintColor: Color(.systemGray))
                         }
-                        
-                        
-                        Section("Cuenta") {
-                            Button {
-                                Task {
-                                    viewModel.signOut()
-                                }
-                            } label: {
-                                SettingsRowView(imageName: "arrow.left.circle.fill",
-                                                title: "Cerrar sesión",
-                                                tintColor: Color(.systemGray))
+                    }
+                    
+                    Section(header: Text("Cuenta")) {
+                        Button {
+                            Task {
+                                viewModel.signOut()
                             }
+                        } label: {
+                            SettingsRowView(imageName: "arrow.left.circle.fill",
+                                            title: "Cerrar sesión",
+                                            tintColor: Color(.systemGray))
                         }
                     }
                 }
             }
         }
+        .navigationTitle("Perfil")
     }
-    
-    struct ProfileView_Previews: PreviewProvider {
-        static var previews: some View {
-            ProfileView()
-        }
-    }
-    
 }
+
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileView()
+    }
+}
+

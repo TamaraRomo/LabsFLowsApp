@@ -6,23 +6,21 @@
 //
 
 import Foundation
+import FirebaseFirestoreSwift
 
 struct Reservation: Identifiable, Codable {
-    let id: String
-    let userId: String
-    let laboratory: String
-    let date: Date
-    let time: String
-    let duration: Int
-    let endTime: String
-    let educationalProgram: String
-    let learningUnit: String
-    let practice: String
-    
-    var laboratoryName: String?
-    var programName: String?
-    var unitName: String?
+    @DocumentID var id: String?
+    var userId: String
+    var laboratory: String
+    var date: Date
+    var time: String
+    var duration: Int
+    var endTime: String
+    var educationalProgram: String
+    var learningUnit: String
+    var practice: String
 }
+
 
 
 

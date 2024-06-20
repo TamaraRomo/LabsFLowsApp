@@ -44,7 +44,7 @@ struct ReservationsView: View {
                     Section(header: Text("Seleccione un laboratorio")) {
                         Picker("Laboratorio", selection: $selectedLab) {
                             ForEach(laboratories) { lab in
-                                Text(lab.name).tag(Optional(lab.id))
+                                Text(lab.name).tag(Optional(lab.name))
                             }
                         }
                     }
@@ -75,7 +75,7 @@ struct ReservationsView: View {
                     Section(header: Text("Seleccione un programa educativo")) {
                         Picker("Programa educativo", selection: $selectedProgram) {
                             ForEach(educationalprograms) { edup in
-                                Text(edup.name).tag(Optional(edup.id))
+                                Text(edup.name).tag(Optional(edup.name))
                             }
                         }
                     }
@@ -83,7 +83,7 @@ struct ReservationsView: View {
                     Section(header: Text("Seleccione una unidad de aprendizaje")) {
                         Picker("Materia", selection: $selectedUnit) {
                             ForEach(learningunits) { unit in
-                                Text(unit.name).tag(Optional(unit.id))
+                                Text(unit.name).tag(Optional(unit.name))
                             }
                         }
                     }
@@ -134,7 +134,7 @@ struct ReservationsView: View {
         do {
             laboratories = try await viewModel.fetchLaboratories()
             if let firstLab = laboratories.first {
-                selectedLab = firstLab.id
+                selectedLab = firstLab.name
             }
         } catch {
             print("Error al cargar laboratorios: \(error.localizedDescription)")
@@ -145,7 +145,7 @@ struct ReservationsView: View {
         do {
             educationalprograms = try await viewModel.fetchEducationalPrograms()
             if let firstProgram = educationalprograms.first {
-                selectedProgram = firstProgram.id
+                selectedProgram = firstProgram.name
             }
         } catch {
             print("Error al cargar programas educativos: \(error.localizedDescription)")
@@ -156,7 +156,7 @@ struct ReservationsView: View {
         do {
             learningunits = try await viewModel.fetchLearningUnit()
             if let firstUnit = learningunits.first {
-                selectedUnit = firstUnit.id
+                selectedUnit = firstUnit.name
             }
         } catch {
             print("Error al cargar las unidades de aprendizaje: \(error.localizedDescription)")
@@ -182,7 +182,6 @@ struct ReservationsView: View {
             educationalProgram: selectedProgram ?? "",
             learningUnit: selectedUnit ?? "",
             practice: practiceName
-            
         )
 
         Task {
@@ -209,12 +208,12 @@ struct ReservationsView: View {
     }
 
     func clearFields() {
-        selectedLab = laboratories.first?.id
+        selectedLab = laboratories.first?.name
         selectedDate = Date()
         selectedTime = "07:00"
         selectedDuration = 1
-        selectedProgram = educationalprograms.first?.id
-        selectedUnit = learningunits.first?.id
+        selectedProgram = educationalprograms.first?.name
+        selectedUnit = learningunits.first?.name
         practiceName = ""
     }
 }
@@ -225,6 +224,7 @@ struct ReservationsView_Previews: PreviewProvider {
             .environmentObject(AuthViewModel())
     }
 }
+
 
 
 

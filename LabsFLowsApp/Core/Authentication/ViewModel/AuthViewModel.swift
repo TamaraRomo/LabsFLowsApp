@@ -14,10 +14,8 @@ import FirebaseFirestoreSwift
 class AuthViewModel: ObservableObject {
     @Published var userSession: FirebaseAuth.User?
     @Published var currentUser: User?
+    @Published var reservations: [Reservation] = []
     
-    @Published var laboratoryNames: [String: String] = [:]
-    @Published var educationalProgramNames: [String: String] = [:]
-    @Published var learningUnitNames: [String: String] = [:]
     
     init() {
         self.userSession = Auth.auth().currentUser
@@ -95,59 +93,11 @@ class AuthViewModel: ObservableObject {
         }
     }
 
-    func fetchReservations(for userId: String) async throws -> [Reservation] {
+    func fetchReservations(for userId: String) async throws {
         let snapshot = try await Firestore.firestore().collection("reservations")
             .whereField("userId", isEqualTo: userId).getDocuments()
-        return snapshot.documents.compactMap { document in
+        self.reservations = snapshot.documents.compactMap { document in
             try? document.data(as: Reservation.self)
-        }
-    }
-    
-    func getLaboratoryName(by id: String) async -> String {
-        if let name = laboratoryNames[id] {
-            return name
-        } else {
-            do {
-                let document = try await Firestore.firestore().collection("laboratories").document(id).getDocument()
-                let name = document.data()?["name"] as? String ?? id
-                laboratoryNames[id] = name
-                return name
-            } catch {
-                print("Error fetching laboratory name: \(error.localizedDescription)")
-                return id
-            }
-        }
-    }
-    
-    func getEducationalProgramName(by id: String) async -> String {
-        if let name = educationalProgramNames[id] {
-            return name
-        } else {
-            do {
-                let document = try await Firestore.firestore().collection("educationalprograms").document(id).getDocument()
-                let name = document.data()?["name"] as? String ?? id
-                educationalProgramNames[id] = name
-                return name
-            } catch {
-                print("Error fetching educational program name: \(error.localizedDescription)")
-                return id
-            }
-        }
-    }
-    
-    func getLearningUnitName(by id: String) async -> String {
-        if let name = learningUnitNames[id] {
-            return name
-        } else {
-            do {
-                let document = try await Firestore.firestore().collection("learningunits").document(id).getDocument()
-                let name = document.data()?["name"] as? String ?? id
-                learningUnitNames[id] = name
-                return name
-            } catch {
-                print("Error fetching learning unit name: \(error.localizedDescription)")
-                return id
-            }
         }
     }
 

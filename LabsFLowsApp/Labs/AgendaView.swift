@@ -9,69 +9,54 @@ import SwiftUI
 
 struct AgendaView: View {
     @EnvironmentObject var viewModel: AuthViewModel
-    @State private var reservations: [ReservationWithNames] = []
-    @State private var selectedReservation: ReservationWithNames?
-
+    @State private var expandedReservationID: String?
+    @State private var selectedTabIndex = 0
+    
     var body: some View {
         VStack {
-            Text("Reservas de laboratorios")
-                .font(.largeTitle)
-                .padding()
-
-            List(reservations) { reservation in
-                VStack(alignment: .leading) {
-                    Text("Práctica: \(reservation.reservation.practice)")
-                    Text("Laboratorio: \(reservation.laboratoryName)")
-                    Text("Fecha: \(reservation.reservation.date, formatter: DateFormatter.shortDate)")
-                    Text("Hora: \(reservation.reservation.time)")
-                }
-                .onTapGesture {
-                    selectedReservation = reservation
-                }
+            Picker(selection: $selectedTabIndex, label: Text("Filtro de reservas")) {
+                Text("Pendientes").tag(0)
+                Text("Pasadas").tag(1)
             }
-
-            if let reservation = selectedReservation {
-                VStack {
-                    Text("Detalles de la reservación")
-                        .font(.headline)
-                    Text("Práctica: \(reservation.reservation.practice)")
-                    Text("Laboratorio: \(reservation.laboratoryName)")
-                    Text("Fecha: \(reservation.reservation.date, formatter: DateFormatter.shortDate)")
-                    Text("Hora: \(reservation.reservation.time)")
-                    Text("Duración: \(reservation.reservation.duration) horas")
-                    Text("Programa educativo: \(reservation.educationalProgramName)")
-                    Text("Unidad de aprendizaje: \(reservation.learningUnitName)")
-                    Text("Usuario: \(reservation.reservation.userId)")
-                }
-                .padding()
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+            
+            TabView(selection: $selectedTabIndex) {
+                ReservationListView(reservations: filterReservations(.pending))
+                    .tabItem {
+                        Label("Pendientes", systemImage: "square.and.pencil")
+                    }
+                    .tag(0)
+                
+                ReservationListView(reservations: filterReservations(.past))
+                    .tabItem {
+                        Label("Pasadas", systemImage: "clock")
+                    }
+                    .tag(1)
             }
-        }
-        .onAppear {
-            Task {
-                await loadReservations()
+            .onAppear {
+                Task {
+                    do {
+                        if let userId = viewModel.currentUser?.id {
+                            try await viewModel.fetchReservations(for: userId)
+                        }
+                    } catch {
+                        print("Error al cargar reservaciones: \(error.localizedDescription)")
+                    }
+                }
             }
         }
+        .navigationTitle("Agenda")
     }
-
-    func loadReservations() async {
-        do {
-            let fetchedReservations = try await viewModel.fetchReservations(for: viewModel.currentUser?.id ?? "")
-            reservations = await mapReservationsWithNames(reservations: fetchedReservations)
-        } catch {
-            print("Error loading reservations: \(error.localizedDescription)")
+    
+    private func filterReservations(_ type: ReservationType) -> [Reservation] {
+        let currentDate = Date()
+        switch type {
+        case .pending:
+            return viewModel.reservations.filter { $0.date >= currentDate }
+        case .past:
+            return viewModel.reservations.filter { $0.date < currentDate }
         }
-    }
-
-    func mapReservationsWithNames(reservations: [Reservation]) async -> [ReservationWithNames] {
-        var reservationsWithNames: [ReservationWithNames] = []
-        for reservation in reservations {
-            let laboratoryName = await viewModel.getLaboratoryName(by: reservation.laboratory)
-            let educationalProgramName = await viewModel.getEducationalProgramName(by: reservation.educationalProgram)
-            let learningUnitName = await viewModel.getLearningUnitName(by: reservation.learningUnit)
-            let reservationWithName = ReservationWithNames(reservation: reservation, laboratoryName: laboratoryName, educationalProgramName: educationalProgramName, learningUnitName: learningUnitName)
-            reservationsWithNames.append(reservationWithName)
-        }
-        return reservationsWithNames
     }
 }
 
@@ -82,28 +67,63 @@ struct AgendaView_Previews: PreviewProvider {
     }
 }
 
-struct ReservationWithNames: Identifiable {
-    let id = UUID()
-    let reservation: Reservation
-    let laboratoryName: String
-    let educationalProgramName: String
-    let learningUnitName: String
-    
-    init(reservation: Reservation, laboratoryName: String, educationalProgramName: String, learningUnitName: String) {
-        self.reservation = reservation
-        self.laboratoryName = laboratoryName
-        self.educationalProgramName = educationalProgramName
-        self.learningUnitName = learningUnitName
-    }
+enum ReservationType {
+    case pending
+    case past
 }
 
-extension DateFormatter {
-    static var shortDate: DateFormatter {
+struct ReservationListView: View {
+    let reservations: [Reservation]
+    @State private var expandedReservationID: String?
+
+    var body: some View {
+        List(reservations) { reservation in
+            VStack(alignment: .leading) {
+                HStack {
+                    Text("Práctica: \(reservation.practice)")
+                        .font(.headline)
+                    Spacer()
+                    Button(action: {
+                        withAnimation {
+                            if expandedReservationID == reservation.id {
+                                expandedReservationID = nil
+                            } else {
+                                expandedReservationID = reservation.id
+                            }
+                        }
+                    }) {
+                        Image(systemName: expandedReservationID == reservation.id ? "chevron.up" : "chevron.down")
+                    }
+                }
+                
+                if expandedReservationID == reservation.id {
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("Laboratorio: \(reservation.laboratory)")
+                        Text("Fecha: \(reservation.date, formatter: dateFormatter)")
+                        Text("Hora: \(reservation.time)")
+                        Text("Duración: \(reservation.duration) horas")
+                        Text("Programa educativo: \(reservation.educationalProgram)")
+                        Text("Unidad de aprendizaje: \(reservation.learningUnit)")
+                        Text("Fin: \(reservation.endTime)")
+                    }
+                    .padding(.top, 5)
+                }
+            }
+            .padding(.vertical, 5)
+        }
+    }
+
+    private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
-        formatter.dateStyle = .short
+        formatter.dateStyle = .medium
         return formatter
     }
 }
+
+
+
+
+
 
 
 
