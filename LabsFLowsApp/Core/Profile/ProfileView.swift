@@ -47,35 +47,35 @@ struct ProfileView: View {
                                             tintColor: Color(.systemGray))
                         }
                         
-                        Button {
-                            print("Buscando reservas...")
-                        } label: {
+                        
+                        NavigationLink(destination: AgendaView()) {
                             SettingsRowView(imageName: "calendar",
                                             title: "Ver reservas de laboratorio",
                                             tintColor: Color(.systemGray))
                         }
-                    }
-                    
-                    Section("Cuenta") {
-                        Button {
-                            Task {
-                                viewModel.signOut()
+                        
+                        
+                        Section("Cuenta") {
+                            Button {
+                                Task {
+                                    viewModel.signOut()
+                                }
+                            } label: {
+                                SettingsRowView(imageName: "arrow.left.circle.fill",
+                                                title: "Cerrar sesión",
+                                                tintColor: Color(.systemGray))
                             }
-                        } label: {
-                            SettingsRowView(imageName: "arrow.left.circle.fill",
-                                            title: "Cerrar sesión",
-                                            tintColor: Color(.systemGray))
                         }
                     }
                 }
             }
         }
     }
-}
-
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
+    
+    struct ProfileView_Previews: PreviewProvider {
+        static var previews: some View {
+            ProfileView()
+        }
     }
+    
 }
-

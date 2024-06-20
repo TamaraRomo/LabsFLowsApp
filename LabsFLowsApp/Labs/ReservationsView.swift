@@ -172,6 +172,8 @@ struct ReservationsView: View {
         isCreatingReservation = true
 
         let reservation = Reservation(
+            id: String(),
+            userId: currentUser.id,
             laboratory: selectedLab ?? "",
             date: selectedDate,
             time: selectedTime,
@@ -179,8 +181,8 @@ struct ReservationsView: View {
             endTime: calculateEndTime(),
             educationalProgram: selectedProgram ?? "",
             learningUnit: selectedUnit ?? "",
-            practice: practiceName,
-            userId: currentUser.id
+            practice: practiceName
+            
         )
 
         Task {

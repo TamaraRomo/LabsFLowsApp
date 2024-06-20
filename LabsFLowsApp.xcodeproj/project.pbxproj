@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3410509E2C23A3CF003F3616 /* AgendaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3410509D2C23A3CF003F3616 /* AgendaView.swift */; };
+		341050A22C23F347003F3616 /* ReservationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 341050A12C23F347003F3616 /* ReservationsView.swift */; };
 		343A6F412C1BAC8A000BBC51 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 343A6F402C1BAC8A000BBC51 /* ContentView.swift */; };
 		34582D122C1A88E100AFAD84 /* LabsFLowsAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34582D112C1A88E100AFAD84 /* LabsFLowsAppApp.swift */; };
 		34582D162C1A88E300AFAD84 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34582D152C1A88E300AFAD84 /* Assets.xcassets */; };
@@ -23,7 +25,6 @@
 		34C103292C1ABE9A0015D361 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 34C103282C1ABE9A0015D361 /* FirebaseFirestoreSwift */; };
 		34C1032B2C1ABE9A0015D361 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 34C1032A2C1ABE9A0015D361 /* FirebaseStorage */; };
 		34C1032F2C1ABFB00015D361 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C1032E2C1ABFB00015D361 /* AuthViewModel.swift */; };
-		34C791A22C1D1DC900533643 /* ReservationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C791A12C1D1DC900533643 /* ReservationsView.swift */; };
 		34C791A62C1D398300533643 /* Laboratory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C791A52C1D398300533643 /* Laboratory.swift */; };
 		34C791A82C1D3E9200533643 /* EducationalProgram.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C791A72C1D3E9200533643 /* EducationalProgram.swift */; };
 		34C791AA2C1D3F6900533643 /* LearningUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34C791A92C1D3F6900533643 /* LearningUnit.swift */; };
@@ -31,6 +32,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3410509D2C23A3CF003F3616 /* AgendaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgendaView.swift; sourceTree = "<group>"; };
+		341050A12C23F347003F3616 /* ReservationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsView.swift; sourceTree = "<group>"; };
 		343A6F402C1BAC8A000BBC51 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		34582D0E2C1A88E100AFAD84 /* LabsFLowsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LabsFLowsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		34582D112C1A88E100AFAD84 /* LabsFLowsAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabsFLowsAppApp.swift; sourceTree = "<group>"; };
@@ -44,7 +47,6 @@
 		34C1031B2C1AAF490015D361 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		34C103212C1ABCF00015D361 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		34C1032E2C1ABFB00015D361 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AuthViewModel.swift; path = LabsFlowsApp/Core/Authentication/ViewModel/AuthViewModel.swift; sourceTree = SOURCE_ROOT; };
-		34C791A12C1D1DC900533643 /* ReservationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReservationsView.swift; sourceTree = "<group>"; };
 		34C791A52C1D398300533643 /* Laboratory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Laboratory.swift; sourceTree = "<group>"; };
 		34C791A72C1D3E9200533643 /* EducationalProgram.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EducationalProgram.swift; sourceTree = "<group>"; };
 		34C791A92C1D3F6900533643 /* LearningUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearningUnit.swift; sourceTree = "<group>"; };
@@ -189,7 +191,8 @@
 		34C791A02C1D1A3C00533643 /* Labs */ = {
 			isa = PBXGroup;
 			children = (
-				34C791A12C1D1DC900533643 /* ReservationsView.swift */,
+				3410509D2C23A3CF003F3616 /* AgendaView.swift */,
+				341050A12C23F347003F3616 /* ReservationsView.swift */,
 			);
 			path = Labs;
 			sourceTree = "<group>";
@@ -275,7 +278,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34582D272C1A8DAF00AFAD84 /* LoginView.swift in Sources */,
-				34C791A22C1D1DC900533643 /* ReservationsView.swift in Sources */,
+				341050A22C23F347003F3616 /* ReservationsView.swift in Sources */,
 				34C791AF2C1D59EC00533643 /* Reservation.swift in Sources */,
 				34582D292C1A949600AFAD84 /* inputView.swift in Sources */,
 				34582D122C1A88E100AFAD84 /* LabsFLowsAppApp.swift in Sources */,
@@ -285,6 +288,7 @@
 				343A6F412C1BAC8A000BBC51 /* ContentView.swift in Sources */,
 				34C103162C1AA1D20015D361 /* RegistrationView.swift in Sources */,
 				34C791A82C1D3E9200533643 /* EducationalProgram.swift in Sources */,
+				3410509E2C23A3CF003F3616 /* AgendaView.swift in Sources */,
 				34C791A62C1D398300533643 /* Laboratory.swift in Sources */,
 				34C1031A2C1AAAD00015D361 /* SettingsRowView.swift in Sources */,
 				34C1032F2C1ABFB00015D361 /* AuthViewModel.swift in Sources */,

@@ -7,7 +7,9 @@
 
 import Foundation
 
-struct Reservation: Codable {
+struct Reservation: Identifiable, Codable {
+    let id: String
+    let userId: String
     let laboratory: String
     let date: Date
     let time: String
@@ -16,7 +18,12 @@ struct Reservation: Codable {
     let educationalProgram: String
     let learningUnit: String
     let practice: String
-    let userId: String
+    
+    var laboratoryName: String?
+    var programName: String?
+    var unitName: String?
 }
+
+
 
 
