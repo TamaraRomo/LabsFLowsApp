@@ -100,5 +100,40 @@ class AuthViewModel: ObservableObject {
             try? document.data(as: Reservation.self)
         }
     }
+    
+    func checkAvailability(laboratory: String, date: Date, duration: Int, completion: @escaping ([String]) -> Void) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        let dateString = dateFormatter.string(from: date)
+        
+        let availableTimes = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00"]
+        
+        var unavailableTimes: [String] = []
+        
+        for reservation in reservations {
+            let reservationDateString = dateFormatter.string(from: reservation.date)
+            if reservation.laboratory == laboratory && reservationDateString == dateString {
+                unavailableTimes.append(reservation.time)
+                if let startHour = Int(reservation.time.prefix(2)) {
+                    for i in 1..<reservation.duration {
+                        let intermediateTime = String(format: "%02d:00", startHour + i)
+                        unavailableTimes.append(intermediateTime)
+                    }
+                }
+            }
+        }
+        
+        let filteredTimes = availableTimes.filter { !unavailableTimes.contains($0) }
+        
+        completion(filteredTimes)
+    }
+
+
+    
+    func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: date)
+    }
 
 }

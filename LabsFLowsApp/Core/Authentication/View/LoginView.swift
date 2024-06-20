@@ -72,15 +72,6 @@ struct LoginView: View {
         }
     }
 }
-//
-//extension LoginView:AuthenticationFormProtocol{
-//    var formIsValid: Bool{
-//        return !email.isEmpty
-//        && email.contains("@uacam.mx")
-//        && !password.isEmpty
-//        && password.count > 5
-//    }
-//}
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {

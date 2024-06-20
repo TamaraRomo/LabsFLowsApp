@@ -22,8 +22,8 @@ struct ReservationsView: View {
     @State private var isCreatingReservation: Bool = false
     @State private var showAlert: Bool = false
     @State private var alertMessage: String = ""
+    @State private var availableTimes: [String] = []
 
-    let times = Array(7...20).map { String(format: "%02d:00", $0) }
     let durations = [1, 2, 3]
 
     var body: some View {
@@ -52,11 +52,14 @@ struct ReservationsView: View {
                     Section(header: Text("Seleccione una fecha")) {
                         DatePicker("Fecha de inicio", selection: $selectedDate, displayedComponents: .date)
                             .datePickerStyle(.compact)
+                            .onChange(of: selectedDate, perform: { _ in
+                                loadAvailableTimes()
+                            })
                     }
 
                     Section(header: Text("Seleccione una hora de inicio")) {
                         Picker("Hora de inicio", selection: $selectedTime) {
-                            ForEach(times, id: \.self) { time in
+                            ForEach(availableTimes, id: \.self) { time in
                                 Text(time).tag(time)
                             }
                         }
@@ -116,6 +119,7 @@ struct ReservationsView: View {
                     Task {
                         await loadEducationalPrograms()
                         await loadLearningUnits()
+                        loadAvailableTimes()
                     }
                 }
             }
@@ -129,6 +133,8 @@ struct ReservationsView: View {
             )
         }
     }
+    
+    
 
     func loadLaboratories() async {
         do {
@@ -140,6 +146,16 @@ struct ReservationsView: View {
             print("Error al cargar laboratorios: \(error.localizedDescription)")
         }
     }
+    
+    func loadAvailableTimes() {
+        guard let selectedLab = selectedLab else { return }
+        
+        viewModel.checkAvailability(laboratory: selectedLab, date: selectedDate, duration: selectedDuration) { times in
+            availableTimes = times
+            selectedTime = availableTimes.first ?? "07:00"
+        }
+    }
+
 
     func loadEducationalPrograms() async {
         do {
@@ -168,6 +184,12 @@ struct ReservationsView: View {
             print("Usuario no encontrado")
             return
         }
+        
+        guard let endTime = calculateEndTime() else {
+            alertMessage = "La hora de finalización no puede superar las 20:00."
+            showAlert = true
+            return
+        }
 
         isCreatingReservation = true
 
@@ -178,7 +200,7 @@ struct ReservationsView: View {
             date: selectedDate,
             time: selectedTime,
             duration: selectedDuration,
-            endTime: calculateEndTime(),
+            endTime: endTime,
             educationalProgram: selectedProgram ?? "",
             learningUnit: selectedUnit ?? "",
             practice: practiceName
@@ -199,13 +221,20 @@ struct ReservationsView: View {
         }
     }
 
-    func calculateEndTime() -> String {
-        // Implementa la lógica para calcular la hora de fin
-        // Ejemplo simple: sumar la duración a la hora de inicio
-        let startHour = Int(selectedTime.prefix(2)) ?? 0
-        let endHour = startHour + selectedDuration
-        return String(format: "%02d:00", endHour)
-    }
+    func calculateEndTime() -> String? {
+       let dateFormatter = DateFormatter()
+       dateFormatter.dateFormat = "HH:mm"
+       guard let startTime = dateFormatter.date(from: selectedTime) else { return nil }
+       let calendar = Calendar.current
+       guard let endTime = calendar.date(byAdding: .hour, value: selectedDuration, to: startTime) else { return nil }
+       
+       let endTimeString = dateFormatter.string(from: endTime)
+       if endTimeString > "20:00" {
+           return nil
+       }
+       
+       return endTimeString
+   }
 
     func clearFields() {
         selectedLab = laboratories.first?.name
