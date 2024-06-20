@@ -16,6 +16,15 @@ struct RegistrationView: View {
     @Environment(\.dismiss) var dissmiss
     @EnvironmentObject var viewModel: AuthViewModel
     
+    private var formIsValid: Bool {
+        return !email.isEmpty && email.contains("@uacam.mx") &&
+               !fullName.isEmpty &&
+               !employeeNumber.isEmpty &&
+               !password.isEmpty &&
+               !confirmPassword.isEmpty &&
+               password == confirmPassword
+    }
+    
     var body: some View {
         NavigationStack{
             VStack{
@@ -103,8 +112,8 @@ struct RegistrationView: View {
                 .frame(width: UIScreen.main.bounds.width - 70, height: 48)
             }
             .background(Color(.systemBlue))
-            //                .disabled(!formIsValid)
-            //                .opacity(formIsValid ? 1.0 : 0.5)
+            .disabled(!formIsValid)
+            .opacity(formIsValid ? 1.0 : 0.5)
             .cornerRadius(10)
             .padding(.top, 24)
             
@@ -123,22 +132,10 @@ struct RegistrationView: View {
     }
 }
 
-//extension RegistrationView:AuthenticationFormProtocol{
-//    var formIsValid: Bool{
-//        return !email.isEmpty
-//        && email.contains("@uacam.mx")
-//        && !employeeNumber.isEmpty
-//        && employeeNumber.count == 5
-//        && !password.isEmpty
-//        && password.count > 5
-//        && confirmPassword == password
-//        && !fullName.isEmpty
-//
-//    }
-//}
-
 struct RegistrationView_Previews: PreviewProvider {
     static var previews: some View {
         RegistrationView()
+            .environmentObject(AuthViewModel())
     }
 }
+

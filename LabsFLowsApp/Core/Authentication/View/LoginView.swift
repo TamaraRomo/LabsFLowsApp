@@ -11,9 +11,14 @@ struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
     @EnvironmentObject var viewModel: AuthViewModel
+    
+    private var formIsValid: Bool {
+        return !email.isEmpty && !password.isEmpty
+    }
+
     var body: some View {
-        NavigationStack{
-            VStack{
+        NavigationStack {
+            VStack {
                 // Imagen
                 Image("Logo")
                     .resizable()
@@ -21,7 +26,7 @@ struct LoginView: View {
                     .frame(width: 100, height: 120)
                     .padding(.vertical, 32)
                 // Campos
-                VStack(spacing: 15){
+                VStack(spacing: 15) {
                     inputView(text: $email,
                               title: "Correo electrónico",
                               placeholder: "correo@ejemplo.mx")
@@ -31,18 +36,17 @@ struct LoginView: View {
                               title: "Contraseña",
                               placeholder: "Ingrese su contraseña",
                               isSecureField: true)
-
                 }
                 .padding(.horizontal)
                 .padding(.top, 12)
                 // Botón
                 
-                Button{
-                    Task{
+                Button {
+                    Task {
                         try await viewModel.signIn(withEmail: email, password: password)
                     }
-                }label: {
-                    HStack{
+                } label: {
+                    HStack {
                         Text("Iniciar sesión")
                             .fontWeight(.semibold)
                         Image(systemName: "arrow.right")
@@ -51,18 +55,18 @@ struct LoginView: View {
                     .frame(width: UIScreen.main.bounds.width - 70, height: 48)
                 }
                 .background(Color(.systemBlue))
-//                .disabled(formIsValid)
-//                .opacity(formIsValid ? 1.0 : 0.5)
+                .disabled(!formIsValid)
+                .opacity(formIsValid ? 1.0 : 0.5)
                 .cornerRadius(10)
-                .padding(.top,12)
+                .padding(.top, 12)
                 Spacer()
                 
                 // Registro
-                NavigationLink{
+                NavigationLink {
                     RegistrationView()
                         .navigationBarBackButtonHidden(true)
-                }label:{
-                    HStack(spacing: 3){
+                } label: {
+                    HStack(spacing: 3) {
                         Text("¿Aún no tienes una cuenta?")
                         Text("Regístrate")
                             .fontWeight(.bold)
@@ -79,3 +83,4 @@ struct LoginView_Previews: PreviewProvider {
             .environmentObject(AuthViewModel())
     }
 }
+
