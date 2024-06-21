@@ -46,7 +46,7 @@ struct AgendaView: View {
                 }
             }
         }
-        .navigationTitle("Agenda")
+        .navigationTitle("Mis reservaciones")
     }
     
     private func filterReservations(_ type: ReservationType) -> [Reservation] {
