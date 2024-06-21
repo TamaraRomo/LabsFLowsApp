@@ -21,7 +21,7 @@ struct ProfileView: View {
                                 .fontWeight(.semibold)
                                 .foregroundColor(.white)
                                 .frame(width: 72, height: 72)
-                                .background(Color(.systemGray3))
+                                .background(Color(.systemBlue))
                                 .clipShape(Circle())
                             VStack(alignment: .leading, spacing: 4) {
                                 Text(user.fullname)
@@ -44,13 +44,13 @@ struct ProfileView: View {
                         NavigationLink(destination: ReservationsView()) {
                             SettingsRowView(imageName: "clock",
                                             title: "Reservar laboratorio",
-                                            tintColor: Color(.systemGray))
+                                            tintColor: Color(.systemIndigo))
                         }
                         
                         NavigationLink(destination: AgendaView()) {
                             SettingsRowView(imageName: "calendar",
                                             title: "Ver reservas de laboratorio",
-                                            tintColor: Color(.systemGray))
+                                            tintColor: Color(.systemIndigo))
                         }
                     }
                     
@@ -62,7 +62,7 @@ struct ProfileView: View {
                         } label: {
                             SettingsRowView(imageName: "arrow.left.circle.fill",
                                             title: "Cerrar sesión",
-                                            tintColor: Color(.systemGray))
+                                            tintColor: Color(.systemRed))
                         }
                     }
                 }

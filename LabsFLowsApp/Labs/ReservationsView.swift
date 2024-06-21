@@ -186,7 +186,7 @@ struct ReservationsView: View {
         }
         
         guard let endTime = calculateEndTime() else {
-            alertMessage = "La hora de finalización no puede superar las 20:00."
+            alertMessage = "La hora de finalización no puede superar las 21:00."
             showAlert = true
             return
         }
@@ -229,7 +229,7 @@ struct ReservationsView: View {
        guard let endTime = calendar.date(byAdding: .hour, value: selectedDuration, to: startTime) else { return nil }
        
        let endTimeString = dateFormatter.string(from: endTime)
-       if endTimeString > "20:00" {
+       if endTimeString > "21:00" {
            return nil
        }
        
